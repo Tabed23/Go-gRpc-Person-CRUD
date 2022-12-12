@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package persons;
+option go_package = "pb";
+import "google/protobuf/timestamp.proto";
+message Person {
+    string name = 1;
+    string id = 2;  
+    string email = 3;
+  
+    enum PhoneType {
+      MOBILE = 0;
+      HOME = 1;
+      WORK = 2;
+    }
+    message PhoneNumber {
+        string number = 1;
+        PhoneType type = 2;
+    }
+    repeated PhoneNumber phones = 4;
+    google.protobuf.Timestamp created_at = 5;
+    google.protobuf.Timestamp last_updated = 6;
+}
+  
+message AddressBook {
+    repeated Person people = 1;
+  }
+
+message PersonResponse {
+    string status = 1;
+
+}
+message GetPersonDetails {
+    string id   =1;
+}
+message Empty {
+}
+message DeletePerosonID {
+    string id = 1;
+}
+message DeletePersonResponse {
+    bool is_deleted =1;
+    google.protobuf.Timestamp deleted_at = 2;
+}
+service PersonService {
+    rpc CreatePerson(Person)returns (PersonResponse){};
+    rpc GetPersonDetail(GetPersonDetails)returns (Person) {};
+    rpc GetAddresBook(Empty)returns ( AddressBook){};
+    rpc DeletePerson(DeletePerosonID)returns (DeletePersonResponse){};
+    rpc UpdatePerson(Person)returns(Person){};
+}
